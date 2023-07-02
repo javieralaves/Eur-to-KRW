@@ -45,6 +45,7 @@ struct ContentView: View {
             if selectedCurrency == "Euro" {
                 Section("EUR") {
                     TextField("Euro", value: $eurInput, format: .currency(code: "EUR"))
+                        .keyboardType(.decimalPad)
                 }
                 Section("To KRW") {
                     // Specifier limits value to 2 decimals
@@ -53,6 +54,7 @@ struct ContentView: View {
             } else {
                 Section("KRW") {
                     TextField("KRW", value: $krwInput, format: .currency(code: "KRW"))
+                        .keyboardType(.decimalPad)
                 }
                 Section("To EUR") {
                     Text("₩\(krwToEur, specifier: "%.2f")")
