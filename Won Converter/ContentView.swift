@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  NewForm.swift
 //  Won Converter
 //
 //  Created by Javier Alaves on 2/7/23.
@@ -9,51 +9,61 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var initialValue: Double = 0.0
-    @State var inputCurrency: String = "Euro"
+    // Inputs
+    @State var eurInput: Double = 0.0
+    @State var krwInput: Double = 0.0
     
-    let currencies: [String] = ["Euro", "Won"]
+    // The currency that the user wants to input a value in
+    @State var selectedCurrency: String = "Euro"
     
-    var krwToEur: Double {
-        return initialValue * 1437.60
-    }
+    // Available currencies to choose from
+    var currencies: [String] = ["Euro", "Won"]
     
+    // Euro to won converter, with hardcoded value
     var eurToKrw: Double {
-        return initialValue * 0.0007
+        return eurInput * 1437.60
     }
     
-    var isEuro: Bool {
-        if inputCurrency == "Euro" {
-            return true
-        } else {
-            return false
-        }
+    // Won to euro converter, with hardcoded value
+    var krwToEur: Double {
+        return krwInput * 0.0007
     }
     
     var body: some View {
         Form {
-            Section("Choose currency") {
-                Picker("Currency", selection: $inputCurrency) {
+            Section("Input") {
+                // Select input currency
+                Picker("Currency", selection: $selectedCurrency) {
                     ForEach(currencies, id: \.self) {
                         Text($0)
                     }
                 }
                 .pickerStyle(.segmented)
             }
-            Section (isEuro ? "Euro" : "Won") {
-                TextField("Euro", value: $initialValue, format: .currency(code: "EUR"))
-                    .keyboardType(.decimalPad)
-            }
-            Section (isEuro ? "Won" : "Euro") {
-                Text(krwToEur, format: .currency(code: "KRW"))
+            
+            // Check if input currency is euro or won
+            if selectedCurrency == "Euro" {
+                Section("EUR") {
+                    TextField("Euro", value: $eurInput, format: .currency(code: "EUR"))
+                }
+                Section("To KRW") {
+                    // Specifier limits value to 2 decimals
+                    Text("₩\(eurToKrw, specifier: "%.2f")")
+                }
+            } else {
+                Section("KRW") {
+                    TextField("KRW", value: $krwInput, format: .currency(code: "KRW"))
+                }
+                Section("To EUR") {
+                    Text("₩\(krwToEur, specifier: "%.2f")")
+                }
             }
         }
     }
     
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+    struct ContentView_Previews: PreviewProvider {
+        static var previews: some View {
+            ContentView()
+        }
     }
 }
