@@ -57,7 +57,7 @@ struct ContentView: View {
                         .keyboardType(.decimalPad)
                 }
                 Section("To EUR") {
-                    Text("₩\(krwToEur, specifier: "%.2f")")
+                    Text("€\(krwToEur, specifier: "%.2f")")
                 }
             }
         }
