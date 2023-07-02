@@ -16,6 +16,9 @@ struct ContentView: View {
     // The currency that the user wants to input a value in
     @State var selectedCurrency: String = "Euro"
     
+    // For keyboard focus state control
+    @FocusState private var amountIsFocused: Bool
+    
     // Available currencies to choose from
     var currencies: [String] = ["Euro", "Won"]
     
@@ -46,6 +49,7 @@ struct ContentView: View {
                 Section("EUR") {
                     TextField("Euro", value: $eurInput, format: .currency(code: "EUR"))
                         .keyboardType(.decimalPad)
+                        .focused($amountIsFocused)
                 }
                 Section("To KRW") {
                     // Specifier limits value to 2 decimals
@@ -55,12 +59,22 @@ struct ContentView: View {
                 Section("KRW") {
                     TextField("KRW", value: $krwInput, format: .currency(code: "KRW"))
                         .keyboardType(.decimalPad)
+                        .focused($amountIsFocused)
                 }
                 Section("To EUR") {
                     Text("€\(krwToEur, specifier: "%.2f")")
                 }
             }
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    amountIsFocused = false
+                }
+            }
+        }
+        
     }
     
     struct ContentView_Previews: PreviewProvider {
